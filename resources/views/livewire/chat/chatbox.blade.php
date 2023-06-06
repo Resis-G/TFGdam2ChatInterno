@@ -34,7 +34,7 @@
 <div class="py-6 px-20 h-3/4 overflow-auto">
     @foreach ($messages as $message)
     
-        @if ($message->receiver_id != auth()->id())
+        @if ($message->sender_id == auth()->id())
         <div class="flex flex-row-reverse mb-12">
             <img src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name={{auth()->user()->name}}" class="self-end rounded-full w-12 ml-4">
             <div class="flex flex-col">
