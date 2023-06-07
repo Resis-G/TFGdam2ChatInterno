@@ -13,38 +13,38 @@ class ChatList extends Component
     public $receiverInstance;
     public $selectedConversation;
 
-    protected $listeners=['chatUserSelected'];
+    protected $listeners = ['chatUserSelected', 'refresh' => '$refresh'];
 
 
-    public function chatUserSelected(Conversation $conversation,$receiverId){
-        
-        $this->selectedConversation=$conversation;
-        $receiverInstance =User::find($receiverId);
+    public function chatUserSelected(Conversation $conversation, $receiverId)
+    {
 
-        $this->emitTo('chat.chatbox','loadConversation',$this->selectedConversation,$receiverInstance);
-        $this->emitTo('chat.send-message','updateSendMessage',$this->selectedConversation,$receiverInstance);
+        $this->selectedConversation = $conversation;
+        $receiverInstance = User::find($receiverId);
 
+        $this->emitTo('chat.chatbox', 'loadConversation', $this->selectedConversation, $receiverInstance);
+        $this->emitTo('chat.send-message', 'updateSendMessage', $this->selectedConversation, $receiverInstance);
     }
 
-    public function getChatUserInstance(Conversation $conversation,$request)
+    public function getChatUserInstance(Conversation $conversation, $request)
     {
-        $this->auth_id= auth()->id();
-        if($conversation->sender_id=$this->auth_id){
-            $this->receiverInstance=User::firstwhere('id',$conversation->receiver_id);
-
-        }else{
-            $this->receiverInstance= User::firstwhere('id',$conversation->sender_id);
+        $this->auth_id = auth()->id();
+        if ($conversation->sender_id = $this->auth_id) {
+            $this->receiverInstance = User::firstwhere('id', $conversation->receiver_id);
+        } else {
+            $this->receiverInstance = User::firstwhere('id', $conversation->sender_id);
         }
 
-        if (isset($request)){
+        if (isset($request)) {
             return $this->receiverInstance->$request;
         }
     }
 
-    public function mount(){
-        $this->auth_id=auth()->id();
-        $this->conversations = Conversation::where('sender_id',$this->auth_id)
-            ->orwhere('receiver_id',$this->auth_id)->orderBy('last_time_message','DESC')->get();
+    public function mount()
+    {
+        $this->auth_id = auth()->id();
+        $this->conversations = Conversation::where('sender_id', $this->auth_id)
+            ->orwhere('receiver_id', $this->auth_id)->orderBy('last_time_message', 'DESC')->get();
     }
     public function render()
     {

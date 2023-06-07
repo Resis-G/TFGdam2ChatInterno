@@ -16,14 +16,6 @@
         @else
             You have any chat
         @endif
-
-        <div class="mr-4 text-center self-center">
-            <div class="relative w-12 mb-2">
-                <img src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name={{$this->getChatUserInstance($conversation,$name='name')}}" class="rounded-full">
-                <div class="absolute bg-red-300 p-1 rounded-full bottom-0 right-0 border-2 border-gray-800"></div>
-            </div>
-            <small>Daniela</small>
-        </div>a
     </div>
     <div class="overflow-auto h-4/5">
 
@@ -32,7 +24,7 @@
         @if ( count($conversations) >0)
         @foreach ( $conversations as $conversation )
 
-        <div class="flex bg-gray-100 mb-4 p-4 rounded" wire:click="$emit('chatUserSelected',{{$conversation}},{{$this->getChatUserInstance($conversation,$name='id')}})">
+        <div class="flex bg-gray-100 mb-4 p-4 rounded" wire:click="$emit('chatUserSelected',{{$conversation}},{{$this->getChatUserInstance($conversation,$name='id')}})"  wire:key="{{$conversation->id}}">
             <img src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name={{$this->getChatUserInstance($conversation,$name='name')}}" class="self-start rounded-full w-12 mr-4">
             <div class="w-full overflow-hidden">
                 <div class="flex mb-1">
