@@ -1,9 +1,9 @@
 <div class="flex py-6 px-20 border-t">
     
 @if ($selectedConversation)
-<form wire:submit.prevent='sendMessage' action="" class="flex flex-grow">
+<form wire:submit.prevent='sendMessage' class="flex flex-grow">
     <div class="w-4/5">
-        <input wire:model='body' type="text" class="rounded-sm px-4 py-2 focus:outline-none bg-gray-100 w-full" placeholder="Escribe tu mensaje..."> 
+        <input wire:model='body' type="text" class="rounded-none px-4 py-2 focus:outline-none bg-gray-100 w-full" placeholder="Escribe tu mensaje..."> 
     </div>
     <div class="w-1/5 flex justify-end">
         <svg class="w-6 mr-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

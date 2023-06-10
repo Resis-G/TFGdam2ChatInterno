@@ -11,7 +11,7 @@ use Livewire\Component;
 class CreateChat extends Component
 {
     public $users;
-    public $message = 'hello, how are you';
+    public $message = 'Hola';
 
     public function checkconversation($receiverId){
         //dd($receiverId);
@@ -21,13 +21,13 @@ class CreateChat extends Component
 
             $createdConversation = Conversation::create(['receiver_id'=>$receiverId,'sender_id'=>auth()->user()->id,'last_time_message'=>Carbon::now()]);
             //conversation created
-            $createdMessage= Message::create(['conversation_id'=>$createdConversation->id,'sender_id'=>auth()->user()->id,'receiver_id'=>$receiverId,'dody'=>$this->message]);
+            $createdMessage= Message::create(['conversation_id'=>$createdConversation->id,'sender_id'=>auth()->user()->id,'receiver_id'=>$receiverId,'body'=>$this->message]);
             
             $createdConversation->last_time_message=$createdMessage->created_at;
             $createdConversation->save();
             
         }else if(count($checkedConversation)>=1){
-            dd('conversation exists');
+            
         };
     }
     public function render()

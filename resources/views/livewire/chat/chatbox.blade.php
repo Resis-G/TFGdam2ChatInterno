@@ -1,4 +1,4 @@
-<div class="h-3/4">
+<div class="h-5/6">
     @if ($selectedConversation)
     <div class="py-6 px-20 border-b">
         <div class="flex">
@@ -35,35 +35,36 @@
             </div>
         </div>
     </div>
-    <div class="chatbox_body py-6 px-20 h-3/4 overflow-auto ">
+    <div class="chatbox_body py-5 px-12 h-5/6 overflow-auto ">
         @foreach ($messages as $message)
 
         @if ($message->sender_id == auth()->id())
-        <div wire:key='{{$message->id}}' class="flex flex-row-reverse mb-12">
+
+        <div class="flex flex-row-reverse mb-12" wire:key='{{$message->id}}'>
             <img src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name={{auth()->user()->name}}"
                 class="self-end rounded-full w-12 ml-4">
             <div class="flex flex-col">
                 <div class="bg-blue-500 text-white p-6 rounded-3xl rounded-br-none w-96 mb-2">
                     <p class="font-medium mb-1">{{auth()->user()->name}}</p>
-                    <small class="inline-block mb-1">{{$message->body}}.</small>
+                    <small class="inline-block mb-1">{{$message->body}}</small>
                 </div>
                 <small class="text-gray-500 self-end">{{$message->created_at->format('m: i a')}}</small>
             </div>
         </div>
+
         @else
-
-        <div wire:key='{{$message->id}}' class="flex mb-12">
-
+        <div class="flex mb-12" wire:key='{{$message->id}}'>
             <img src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name={{$receiverInstance->name}}"
                 class="self-end rounded-full w-12 mr-4">
             <div class="flex flex-col">
                 <div class="bg-white p-6 rounded-3xl rounded-bl-none w-96 shadow-sm mb-2">
                     <p class="font-medium mb-1">{{$receiverInstance->name}}</p>
-                    <small class="inline-block text-gray-500 mb-1">{{$message->body}}</small>
+                    <small class="inline-block text-gray-500 mb-1"> {{$message->body}}</small>
                 </div>
                 <small class="text-gray-500">{{$message->created_at->format('m: i a')}}</small>
             </div>
         </div>
+
         @endif
 
 

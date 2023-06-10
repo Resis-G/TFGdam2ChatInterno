@@ -2,44 +2,56 @@
 
 namespace App\Http\Livewire\Chat;
 
+use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class SendMessage extends Component
 {
 
-    public $selectedConversation,$receiverInstance,$body;
-    protected $listeners=['updateSendMessage'];
+    public $selectedConversation, $receiverInstance, $body, $createdMessage;
+    protected $listeners = ['updateSendMessage', 'dispatchMessageSent'];
 
 
-    public function updateSendMessage(Conversation $conversation, User $receiver){
+    public function updateSendMessage(Conversation $conversation, User $receiver)
+    {
         //dd($conversation,$receiver);
-        $this->selectedConversation=$conversation;
-        $this->receiverInstance=$receiver;
-    
+        $this->selectedConversation = $conversation;
+        $this->receiverInstance = $receiver;
     }
 
-    public function sendMessage(){
+    public function sendMessage()
+    {
 
-        if($this->body ==null){
+        if ($this->body == null) {
             return null;
         }
-        $createdMessage=Message::create([
-            'conversation_id'=>$this->selectedConversation->id,
-            'sender_id'=>auth()->id(),
-            'receiver_id'=>$this->receiverInstance->id,
-            'body'=>$this->body
+        $this->createdMessage = Message::create([
+            'conversation_id' => $this->selectedConversation->id,
+            'sender_id' => auth()->id(),
+            'receiver_id' => $this->receiverInstance->id,
+            'body' => $this->body,
         ]);
 
-        $this->selectedConversation->last_time_message =$createdMessage->created_at;
+        $this->selectedConversation->last_time_message = $this->createdMessage->created_at;
         $this->selectedConversation->save();
 
-        $this->emitTo('chat.chatbox','pushMessage',$createdMessage->id);
-        $this->emitTo('chat.chat-list','refresh');
+        $this->emitTo('chat.chatbox', 'pushMessage', $this->createdMessage->id);
+        $this->emitTo('chat.chat-list', 'refresh');
         $this->reset('body');
+
+        $this->emitSelf('dispatchMessageSent');
         //dd($this->body);
+    }
+
+    public function dispatchMessageSent()
+    {
+
+        broadcast(new MessageSent(Auth()->user(), $this->createdMessage, $this->selectedConversation, $this->receiverInstance));
+        
     }
     public function render()
     {
